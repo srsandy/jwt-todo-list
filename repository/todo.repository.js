@@ -6,4 +6,11 @@ export const createTodo = async (todo) => {
   return _todo.save();
 };
 
-// export.findTodoByUser = (owner) => Todo.find({owner});
+export const getAllTodosByProperties = (searchObject) =>
+  Todo.find(searchObject).lean();
+
+export const deleteTodoById = (id, owner) =>
+  Todo.findOneAndDelete({ owner, _id: id });
+
+export const updateTodoById = (id, owner, updateObject) =>
+  Todo.findOneAndUpdate({ owner, _id: id }, updateObject);

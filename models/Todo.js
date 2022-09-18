@@ -1,7 +1,7 @@
 import mongoose from "mongoose";
 
 const TodoSchema = new mongoose.Schema({
-  //   owner: { type: Schema.Types.ObjectId, ref: "User" },
+  owner: { type: mongoose.Schema.Types.ObjectId, ref: "User", required: true },
   name: {
     type: "String",
     required: true,
