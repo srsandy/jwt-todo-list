@@ -1,0 +1,328 @@
+{
+	"info": {
+		"_postman_id": "ea1b77ff-2bcc-411a-9083-e81f31c0ed89",
+		"name": "Jwt-todo-list",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+	},
+	"item": [
+		{
+			"name": "Auth",
+			"item": [
+				{
+					"name": "Login/Signin",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"if(pm.response.code === 200) {",
+									"    var json = JSON.parse(responseBody);",
+									"    pm.collectionVariables.set(\"token\", \"Bearer \" + json.token);",
+									"} else {",
+									"    pm.collectionVariables.set(\"token\", null);",
+									"}"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Authorization",
+								"value": "Bearer eyJhbGciOiJIUzI1NiddInR5cCI6IkpXVCJ9.eyJpZCI6IjYzMjYyZGU4NGQwZmI1MzdkOWM2M2M2ZiIsInVzZXJuYW1lIjoic2FuZGVlcCIsImlhdCI6MTY2MzQ0ODc2NiwiZXhwIjoxNjYzNTM1MTY2fQ.NcE8FGu2e8-YwE8JdXNh_xBITzllYQrB5tPecXZSIfE",
+								"type": "text",
+								"disabled": true
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"username\": \"{{signup_username}}\",\n    \"password\": \"{{signup_password}}\"\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{app_host_name}}/login",
+							"host": [
+								"{{app_host_name}}"
+							],
+							"path": [
+								"login"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Logout/Signout",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"if(pm.response.code === 200) {",
+									"    pm.collectionVariables.set(\"token\", null);",
+									"}"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "GET",
+						"header": [
+							{
+								"key": "Authorization",
+								"value": "{{token}}",
+								"type": "text"
+							}
+						],
+						"url": {
+							"raw": "{{app_host_name}}/logout",
+							"host": [
+								"{{app_host_name}}"
+							],
+							"path": [
+								"logout"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Register/Signup",
+					"event": [
+						{
+							"listen": "prerequest",
+							"script": {
+								"exec": [
+									"pm.collectionVariables.set(\"signup_username\", \"name -\" + Math.random());",
+									"pm.collectionVariables.set(\"signup_password\", \"password -\" + Math.random());"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"username\": \"{{signup_username}}\",\n    \"password\": \"{{signup_password}}\"\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{app_host_name}}/signup",
+							"host": [
+								"{{app_host_name}}"
+							],
+							"path": [
+								"signup"
+							]
+						}
+					},
+					"response": []
+				}
+			],
+			"description": "Auth routes\n\nuses variables \n - signup_password\n - signup_username"
+		},
+		{
+			"name": "Todo",
+			"item": [
+				{
+					"name": "Get Todos",
+					"request": {
+						"method": "GET",
+						"header": [
+							{
+								"key": "Authorization",
+								"value": "{{token}}",
+								"type": "text"
+							}
+						],
+						"url": {
+							"raw": "{{app_host_name}}/todo",
+							"host": [
+								"{{app_host_name}}"
+							],
+							"path": [
+								"todo"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Create Todo",
+					"event": [
+						{
+							"listen": "prerequest",
+							"script": {
+								"exec": [
+									"pm.collectionVariables.set(\"random_task_name\", \"Task -\" + Math.random());"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Authorization",
+								"value": "{{token}}",
+								"type": "text"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"name\" : \"{{random_task_name}}\"\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{app_host_name}}/todo",
+							"host": [
+								"{{app_host_name}}"
+							],
+							"path": [
+								"todo"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Update Todo",
+					"event": [
+						{
+							"listen": "prerequest",
+							"script": {
+								"exec": [
+									"pm.collectionVariables.set(\"todo_description\", \"Descp -\" + Math.random());"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "PUT",
+						"header": [
+							{
+								"key": "Authorization",
+								"value": "{{token}}",
+								"type": "text"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"description\": \"{{todo_description}}\"\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{app_host_name}}/todo/{{todo_id}}",
+							"host": [
+								"{{app_host_name}}"
+							],
+							"path": [
+								"todo",
+								"{{todo_id}}"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Delete Todo",
+					"request": {
+						"method": "DELETE",
+						"header": [
+							{
+								"key": "Authorization",
+								"value": "{{token}}",
+								"type": "text"
+							}
+						],
+						"url": {
+							"raw": "{{app_host_name}}/todo/{{todo_id}}",
+							"host": [
+								"{{app_host_name}}"
+							],
+							"path": [
+								"todo",
+								"{{todo_id}}"
+							]
+						}
+					},
+					"response": []
+				}
+			],
+			"description": "Todo routes"
+		}
+	],
+	"event": [
+		{
+			"listen": "prerequest",
+			"script": {
+				"type": "text/javascript",
+				"exec": [
+					""
+				]
+			}
+		},
+		{
+			"listen": "test",
+			"script": {
+				"type": "text/javascript",
+				"exec": [
+					"pm.globals.get(\"variable_key\");"
+				]
+			}
+		}
+	],
+	"variable": [
+		{
+			"key": "token",
+			"value": "null"
+		},
+		{
+			"key": "app_host_name",
+			"value": "http://localhost:3000"
+		},
+		{
+			"key": "random_task_name",
+			"value": ""
+		},
+		{
+			"key": "todo_id",
+			"value": ""
+		},
+		{
+			"key": "todo_description",
+			"value": ""
+		},
+		{
+			"key": "signup_username",
+			"value": ""
+		},
+		{
+			"key": "signup_password",
+			"value": ""
+		}
+	]
+}
